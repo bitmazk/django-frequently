@@ -19,7 +19,7 @@ class EntryForm(forms.ModelForm):
     """
     class Meta:
         model = Entry
-        fields = ('question', 'submitted_by', )
+        fields = ('name', 'submitted_by', 'question')
 
     def __init__(self, owner=None, *args, **kwargs):
         self.owner = owner

@@ -1,7 +1,7 @@
 {% load i18n %}
-<a href="{% url "frequently_submit_question" %}">{% trans "You can't find an answer to your issue? Submit your own! We'll help you out." %}</a>
 <div>
-  {% for category in categories %}
-    {% include "frequently/partials/category.html" %}
-  {% endfor %}
+    {% for category in categories %}
+        {% include "frequently/partials/category.html" %}
+    {% endfor %}
+    {% include 'frequently/entry_form.html' %}
 </div>

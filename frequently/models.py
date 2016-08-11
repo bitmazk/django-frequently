@@ -1,3 +1,4 @@
+# coding: utf-8
 """Models for the ``frequently`` app."""
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -71,73 +72,49 @@ class Entry(models.Model):
     :published: Shows/hides entries.
 
     """
-    owner = models.ForeignKey(
-        'auth.User',
-        verbose_name=_('Owner'),
-        blank=True, null=True,
-    )
+    name = models.CharField(max_length=255, verbose_name='Имя')
 
-    category = models.ManyToManyField(
-        EntryCategory,
-        verbose_name=_('Category'),
-        related_name='entries',
-    )
+    owner = models.ForeignKey('auth.User', verbose_name=_('Owner'),
+                              blank=True, null=True)
 
-    question = models.TextField(
-        max_length=2000,
-        verbose_name=_('Question'),
-    )
+    category = models.ManyToManyField(EntryCategory,
+                                      verbose_name=_('Category'),
+                                      related_name='entries')
 
-    slug = models.SlugField(
-        max_length=200,
-        unique=True,
-        verbose_name=_('Slug'),
-    )
+    question = models.TextField(max_length=2000,
+                                verbose_name=_('Question'))
 
-    answer = RichTextField(
-        verbose_name=_('Answer'),
-        blank=True,
-    )
+    slug = models.SlugField(max_length=200, unique=True,
+                            verbose_name=_('Slug'))
 
-    creation_date = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name=_('Creation date'),
-    )
+    answer = RichTextField(verbose_name=_('Answer'), blank=True)
 
-    last_view_date = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name=_('Date of last view'),
-    )
+    creation_date = models.DateTimeField(auto_now_add=True,
+                                         verbose_name=_('Creation date'))
+
+    last_view_date = models.DateTimeField(auto_now_add=True,
+                                          verbose_name=_('Date of last view'))
 
     amount_of_views = models.PositiveIntegerField(
-        default=0,
-        verbose_name=_('Amount of views'),
+        default=0, verbose_name=_('Amount of views')
     )
 
     fixed_position = models.PositiveIntegerField(
-        verbose_name=_('Fixed position'),
-        blank=True, null=True,
+        verbose_name=_('Fixed position'), blank=True, null=True,
     )
 
-    upvotes = models.PositiveIntegerField(
-        default=0,
-        verbose_name=_('Upvotes'),
-    )
+    upvotes = models.PositiveIntegerField(default=0, verbose_name=_('Upvotes'))
 
     downvotes = models.PositiveIntegerField(
-        default=0,
-        verbose_name=_('Downvotes'),
+        default=0, verbose_name=_('Downvotes'),
     )
 
     published = models.BooleanField(
-        default=False,
-        verbose_name=_('is published'),
+        default=False, verbose_name=_('is published'),
     )
 
     submitted_by = models.EmailField(
-        max_length=100,
-        verbose_name=_('Submitted by'),
-        blank=True,
+        max_length=100, verbose_name=_('Submitted by'), blank=True,
     )
 
     class Meta:
@@ -167,32 +144,22 @@ class Feedback(models.Model):
     :validation: Is this a positive or negative feedback.
 
     """
-    user = models.ForeignKey(
-        'auth.User',
-        verbose_name=_('User'),
-        blank=True, null=True,
-    )
+    user = models.ForeignKey('auth.User', verbose_name=_('User'),
+                             blank=True, null=True)
 
-    entry = models.ForeignKey(
-        Entry,
-        verbose_name=_('Related entry'),
-        blank=True, null=True,
-    )
+    entry = models.ForeignKey(Entry, verbose_name=_('Related entry'),
+                              blank=True, null=True)
 
-    remark = models.TextField(
-        verbose_name=_('Remark'),
-        blank=True,
-    )
+    remark = models.TextField(verbose_name=_('Remark'), blank=True)
 
-    submission_date = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name=_('Submission date'),
-    )
+    submission_date = models.DateTimeField(auto_now_add=True,
+                                           verbose_name=_('Submission date'))
 
     validation = models.CharField(
         max_length=1,
-        choices=(('P', _('Positive')), ('N', _('Negative'))),
         verbose_name=_('Validation mood'),
+        choices=(('P', _('Positive')), ('N', _('Negative'))),
+
     )
 
     def __str__(self):

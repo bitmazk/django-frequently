@@ -2,6 +2,7 @@
 Views for the ``django-frequently`` application.
 
 """
+import json
 from math import fsum
 
 from django.contrib import messages
@@ -217,12 +218,6 @@ class EntryCreateView(AccessMixin, CreateView):
     form_class = EntryForm
     access_mixin_setting_name = 'FREQUENTLY_ALLOW_ANONYMOUS'
 
-    def form_valid(self, form):
-        messages.add_message(self.request, messages.SUCCESS, _(
-            'Your question has been posted. Our team will review it as soon'
-            ' as possible and get back to you with an answer.'))
-        return super(EntryCreateView, self).form_valid(form)
-
     def get_form_kwargs(self):
         kwargs = super(EntryCreateView, self).get_form_kwargs()
         if self.request.user.is_authenticated():
@@ -231,5 +226,20 @@ class EntryCreateView(AccessMixin, CreateView):
             })
         return kwargs
 
-    def get_success_url(self):
-        return reverse('frequently_list')
+    def render_to_json_response(self, context, **response_kwargs):
+        data = json.dumps(context)
+        response_kwargs['content_type'] = 'application/json'
+        return HttpResponse(data, **response_kwargs)
+
+    def form_invalid(self, form):
+        response = super(EntryCreateView, self).form_invalid(form)
+        if self.request.is_ajax():
+            return self.render_to_json_response(form.errors, status=400)
+        return response
+
+    def form_valid(self, form):
+        response = super(EntryCreateView, self).form_valid(form)
+        if self.request.is_ajax():
+            data = {'pk': self.object.pk}
+            return self.render_to_json_response(data)
+        return response
