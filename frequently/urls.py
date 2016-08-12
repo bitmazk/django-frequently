@@ -13,6 +13,10 @@ urlpatterns = [
         views.EntryCreateView.as_view(),
         name='frequently_submit_question'),
 
+    url(r'^category-entries/$',
+        views.RenderedEntriesList.as_view(),
+        name='frequently_category_entries'),
+
     url(r'^(?P<slug>[a-z-0-9]+)/$',
         views.EntryDetailView.as_view(),
         name='frequently_entry_detail'),

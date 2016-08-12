@@ -1,14 +1,40 @@
-{% extends "base.html" %}
-{% load i18n %}
+{% load staticfiles sekizai_tags %}
 
-{% block title %}{% trans "Your question" %}{% endblock %}
+<section class="b-section feedback">
+    <div class="container">
+        <form class="b-form" data-class="frequently-form" method="post" action="{% url 'frequently_submit_question' %}">
+            {% csrf_token %}
+            <h4 class="-white">Задать вопрос</h4>
+            <div id='non-field-errors'></div>
+            <div id="question-notification" class="b-form__message is-active" style="display:none">
+                <div class="b-form__message__inner">
+                    <h4 class="-red">Ваше сообщение отправлено.</h4>
+                </div>
+            </div>
+            <div class="b-section__row">
+                <div class="b-form__input">
+                    <input type="text" id='id-name' placeholder="Имя">
+                </div>
+            </div>
+            <div class="b-section__row">
+                <div class="b-form__input">
+                    <input type="text" id='id-submitted_by' placeholder="E-mail">
+                </div>
+            </div>
+            <div class="b-section__row">
+                <div class="b-form__text">
+                    <textarea cols="30" rows="5" id='id-question' placeholder="Вопрос"></textarea>
+                </div>
+            </div>
+            <div class="b-section__row">
+                <div class="b-form__submit">
+                    <input type="submit" value="Задать вопрос">
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
 
-{% block main %}
-  <h1>{% trans "Your question" %}</h1>
-  <form method="post" action=".">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="{% trans "Submit question" %}" />
-  </form>
-  {% trans "We will send an answer as soon as possible. Thank you for your contribution." %}
-{% endblock %}
+{% addtoblock 'js' %}
+    <script type="text/javascript" src="{% static 'frequently/js/frequently.js' %}"></script>
+{% endaddtoblock %}
