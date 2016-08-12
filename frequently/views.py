@@ -12,7 +12,8 @@ from django.http import HttpResponse, Http404
 from django.template.response import TemplateResponse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import CreateView, DetailView, ListView
+from django.views.generic import CreateView, DetailView, ListView, View
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from django_libs.views_mixins import AccessMixin
 
@@ -166,6 +167,7 @@ class EntryCategoryListView(AccessMixin, EntryMixin, ListView):
     model = EntryCategory
     template_name = "frequently/entry_list.html"
     access_mixin_setting_name = 'FREQUENTLY_ALLOW_ANONYMOUS'
+    paginate_by = 4
 
     def get_queryset(self):
         """
@@ -174,6 +176,18 @@ class EntryCategoryListView(AccessMixin, EntryMixin, ListView):
         """
         self.queryset = super(EntryCategoryListView, self).get_queryset()
         return self.get_ordered_entries(self.queryset)
+
+
+class RenderedEntriesList(ListView):
+    model = Entry
+    template_name = "frequently/rendered_entries_list.html"
+    paginate_by = 4
+
+    def get_queryset(self):
+        category_id = self.request.GET.get('category_id').split(',')
+        if category_id:
+            return Entry.objects.filter(category__in=category_id)
+        return Entry.objects.all()
 
 
 class EntryDetailView(AccessMixin, EntryMixin, DetailView):

@@ -1,9 +1,8 @@
-<h2>{{ category.name }}</h2>
 <li>
 	{% for entry in category.get_entries %}
-	  {% include "frequently/partials/entry.html" %}
-	  {% if entry == object %}
-		{% include "frequently/partials/answer.html" %}
-	  {% endif %}
+        {% include "frequently/partials/entry.html" %}
+        {% if entry == object %}
+            {% include "frequently/partials/answer.html" %}
+	    {% endif %}
 	{% endfor %}
 </li>

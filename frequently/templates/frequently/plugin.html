@@ -1,7 +1,20 @@
-{% load i18n %}
-<div>
-    {% for category in categories %}
-        {% include "frequently/partials/category.html" %}
-    {% endfor %}
-    {% include 'frequently/entry_form.html' %}
+{% load staticfiles sekizai_tags %}
+
+<h2>
+    Вопрос-ответ
+</h2>
+<div class="b-list--qa">
+    <ul id="entries_container" data-entries="{% url 'frequently_category_entries' %}" data-category_id="{{ categories }}">
+    </ul>
 </div>
+
+<div class="b-list--qa__button">
+    <a href="#" id="read-more-questions" class="b-button -white">
+        Читать больше вопросов
+    </a>
+</div>
+
+
+{% addtoblock 'js' %}
+    <script type="text/javascript" src="{% static 'frequently/js/load_more.js' %}"></script>
+{% endaddtoblock %}

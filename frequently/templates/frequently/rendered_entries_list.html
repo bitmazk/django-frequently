@@ -1,0 +1,14 @@
+{% load staticfiles %}
+
+{% for entry in object_list %}
+    <li>
+        {% include "frequently/partials/entry.html" %}
+        {% if entry == object %}
+        {% include "frequently/partials/answer.html" %}
+        {% endif %}
+    </li>
+{% endfor %}
+
+<script type="text/javascript">
+    window.has_next = {% if page_obj.has_next %}true{% else %}false{% endif %};
+</script>
